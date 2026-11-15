@@ -78,8 +78,20 @@ def kirim(teks):
     if not token or not chat:
         print("[Telegram belum diatur, pesan hanya ditampilkan]\n" + teks)
         return
-    data = urllib.parse.urlencode({"chat_id": chat, "text": teks}).encode()
-    urllib.request.urlopen(f"https://api.telegram.org/bot{token}/sendMessage", data=data, timeout=20)
+    data = urllib.parse.urlencode({"chat_id": chat.strip(), "text": teks}).encode()
+    try:
+        urllib.request.urlopen(f"https://api.telegram.org/bot{token.strip()}/sendMessage", data=data, timeout=20)
+    except urllib.error.HTTPError as e:
+        try:
+            alasan = json.loads(e.read().decode("utf-8", "ignore")).get("description", "")
+        except ValueError:
+            alasan = ""
+        petunjuk = {
+            401: "Token bot salah. Periksa Secret TELEGRAM_TOKEN.",
+            400: "Chat ID salah atau bot belum pernah di-Start. Periksa Secret TELEGRAM_CHAT_ID (angka saja).",
+            403: "Bot diblokir atau belum di-Start di Telegram. Buka bot lalu tekan Start.",
+        }.get(e.code, "Periksa kembali Secret TELEGRAM_TOKEN dan TELEGRAM_CHAT_ID.")
+        raise SystemExit(f"GAGAL MENGIRIM KE TELEGRAM (HTTP {e.code}: {alasan}). {petunjuk}")
 
 
 def baca_status(sekarang):
