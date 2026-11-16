@@ -1,6 +1,8 @@
 # Pemantau Learning Management System SMA Negeri 22 Makassar
 
 GitHub Actions membuka https://lms-sman22mks.my.id/masuk/ setiap sekitar 5 menit dari luar jaringan sekolah.
+Jadwal bawaan GitHub sering molor berjam-jam, jadi workflow dipicu cron-job.org setiap 5 menit
+(panggilan `workflow_dispatch` memakai token GitHub khusus repositori ini, disimpan hanya di cron-job.org).
 Jika gagal 3 kali berturut-turut, bot Telegram mengirim pesan "TIDAK BISA DIAKSES" beserta perkiraan penyebabnya.
 Saat pulih, bot mengirim pesan "kembali normal" beserta lama gangguan. Selama masih mati, pengingat dikirim setiap 6 jam.
 
@@ -10,4 +12,4 @@ Saat pulih, bot mengirim pesan "kembali normal" beserta lama gangguan. Selama ma
 
 Token bot dan chat id disimpan sebagai **GitHub Secrets** (`TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID`), tidak pernah di dalam kode.
 
-Uji kirim pesan: tab **Actions** → **Pantau LMS** → **Run workflow**.
+Uji kirim pesan: tab **Actions** → **Pantau LMS** → **Run workflow**, centang "Kirim pesan uji ke Telegram".

@@ -1,14 +1,16 @@
 name: Pantau LMS
 
 on:
+  # Jadwal GitHub sering molor berjam-jam, jadi pemicu utamanya cron-job.org
+  # yang memanggil workflow_dispatch setiap 5 menit. Jadwal ini hanya cadangan.
   schedule:
-    - cron: "*/5 * * * *"   # setiap 5 menit (GitHub kadang terlambat beberapa menit)
+    - cron: "*/5 * * * *"
   workflow_dispatch:
     inputs:
       uji:
         description: "Kirim pesan uji ke Telegram"
         type: boolean
-        default: true
+        default: false   # false supaya panggilan otomatis dari cron-job.org tidak mengirim pesan uji
 
 permissions:
   contents: write   # hanya untuk menyimpan status.json
